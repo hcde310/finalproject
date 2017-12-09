@@ -1,0 +1,25 @@
+<!HTML DOCTYPE>
+<html>
+<head>
+<title>{{page_title}}</title>
+</head>
+<body>
+<h1>{{page_title}}</h1>
+<br>
+
+<div>
+    <h3>The Pet You Are Looking For</h3>
+	{% for p in pet %}
+        <h4>{{p.name}}</h4>
+		<img src="{{p.thumbnail}}" alt="{{p.title}}"/>
+        <h4>{{p.family}}</h4>
+        <h4>{{p.WeakAgainst}}</h4>
+        <h4>{{p.StrongAgainst}}</h4>
+    {% endfor %}
+
+</div>
+</body>
+</html>
+
+
+
