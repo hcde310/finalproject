@@ -1,17 +1,19 @@
-import urllib, json, webbrowser, jinja2, os, logging
-import urllib.request, urllib.error, urllib.parse
-import webapp2
+import webapp2, urllib, urllib2, webbrowser, json
+import jinja2
+
+import os
+import logging
 
 def pretty(obj):
     return json.dumps(obj, sort_keys=True, indent=2)
 
 def safeGet(url):
     try:
-        return urllib.request.urlopen(url)
-    except urllib.error.HTTPError as e:
+        return urllib.urlopen(url)
+    except urllib2.error.HTTPError as e:
         print("The server couldn't fulfill the request.")
         print("Error code: ", e.code)
-    except urllib.error.URLError as e:
+    except urllib2.error.URLError as e:
         print("We failed to reach a server")
         print("Reason: ", e.reason)
     return None
@@ -23,7 +25,7 @@ def wowREST(method='pet', params={}):
     params['locale'] = 'en_US'
     params['apikey'] = WOW_KEY
 
-    url = baseurl + method + '/?' + urllib.parse.urlencode(params)
+    url = baseurl + method + '/?' + urllib.urlencode(params)
     return safeGet(url)
 
 def petdict(url):
@@ -115,23 +117,23 @@ class MainHandler(webapp2.RequestHandler):
 
 class GreetResponseHandlr(webapp2.RequestHandler):
     def post(self):
-        wowurl = wowREST()
-        wowdict = petdict(wowurl)
-        pd= collectInfo(wowdict)
-        petlist = [usePetObject(p, pd) for p in pd]
-
         vals={'pet':[]}
         pet = self.request.get('pet')
         vals['page_title']="World of Warcraft Pet Search: " + pet
         #vals['pet'] = petlist
 
+
         if pet:
             pet = self.request.get('pet')
-            pn = getTargetedPetInfo(pet, petlist)
-            #pn = {'thumbnail': pet.thumbnailURL, 'title': pet}
+            wowurl = wowREST()
+            wowdict = petdict(wowurl)
+            pd = collectInfo(wowdict)
+            petlist = [usePetObject(p, pd) for p in pd]
+            p = getTargetedPetInfo(pet, petlist)
+            pn = {'thumbnail': pet.thumbnailURL, 'title': pet}
             vals['pet'].appened(pn)
 
-            template = JINJA_ENVIRONMENT.get_template('final project.html')
+            template = JINJA_ENVIRONMENT.get_template('greetresponse.html')
             self.response.write(template.render(vals))
         else:
             template = JINJA_ENVIRONMENT.get_template('greetform.html')
