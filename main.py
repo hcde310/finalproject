@@ -83,28 +83,13 @@ if __name__ == '__main__':
     print('testing class')
     wowurl = wowREST()
     wowdict = petdict(wowurl)
-    petdict = collectInfo(wowdict)
-    petlist = [usePetObject(p, petdict) for p in petdict]
+    pd = collectInfo(wowdict)
+    petlist = [usePetObject(p, pd) for p in pd]
     #getTargetedPetInfo("Ash'ana", petlist)
 
 JINJA_ENVIRONMENT = jinja2.Environment(loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
-
-if __name__ == "__main__":
-        # my family locations.
-        # template data, with empty list for family members
-        tvals = {'pet': []}
-
-        p1 = getTargetedPetInfo("Ash'ana", petlist)
-        #p = {'thumbnail': p1.thumbnailURL, 'name': p1.name, 'family': p1.family, 'strongAgainst': p1.StrongAgainst, 'weakAgainst': p1.WeakAgainst}
-        tvals['pet'] = petlist
-
-        print(tvals)
-        f = open("wowpet.html", 'w')
-        template = JINJA_ENVIRONMENT.get_template('final project.html')
-        f.write(template.render(tvals))
-        f.close()
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -117,7 +102,7 @@ class MainHandler(webapp2.RequestHandler):
 
 class GreetResponseHandlr(webapp2.RequestHandler):
     def post(self):
-        vals={'pet':[]}
+        vals={}
         pet = self.request.get('pet')
         vals['page_title']="World of Warcraft Pet Search: " + pet
         #vals['pet'] = petlist
@@ -128,10 +113,10 @@ class GreetResponseHandlr(webapp2.RequestHandler):
             wowurl = wowREST()
             wowdict = petdict(wowurl)
             pd = collectInfo(wowdict)
-            petlist = [usePetObject(p, pd) for p in pd]
-            p = getTargetedPetInfo(pet, petlist)
-            pn = {'thumbnail': pet.thumbnailURL, 'title': pet}
-            vals['pet'].appened(pn)
+            #petlist = [usePetObject(p, collectInfo(wowdict)) for p in collectInfo(wowdict)]
+            pn = usePetObject(pet, pd)
+            #, 'name': p.name, 'family': p.family, 'weakAgainst': p.WeakAgainst, 'strongAgainst': p.StrongAgainst}
+            vals['pet'] = pn
 
             template = JINJA_ENVIRONMENT.get_template('greetresponse.html')
             self.response.write(template.render(vals))

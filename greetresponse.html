@@ -1,21 +1,20 @@
 <!HTML DOCTYPE>
 <html>
 <head>
-<title>{{WoW Pet Search}}</title>
+<title>{{page_title}}</title>
 </head>
 <body>
-<h1>{{World of Warcraft Pet Search}}</h1>
+<h1>{{page_title}}</h1>
 <br>
 
 <div>
     <h3>The Pet You Are Looking For</h3>
-        <h4>{{Pet Name: p.name}}</h4>
-		<img src="{{p.thumbnail}}" alt="{{p.title}}"/>
-        <h4>{{Pet Family: p.family}}</h4>
-        <h4>{{Pet is weakest against (pet type): p.WeakAgainst}}</h4>
-        <h4>{{Pet is strongest against (pet type): p.StrongAgainst}}</h4>
-
-
+        <h4>{{pn}}</h4>
+        <h4>Pet Name: "{{pet.name}}"</h4>
+		<img src="{{pet.thumbnailURL}}" alt="{{pet.name}}"/>
+        <h4>Pet Family: {{pet.family}}</h4>
+        <h4>Pet is weakest against (pet type): {{pet.WeakAgainst}}</h4>
+        <h4>Pet is strongest against (pet type): {{pet.StrongAgainst}}</h4>
 </div>
 </body>
 </html>
