@@ -35,7 +35,7 @@ def petdict(url):
 def collectInfo(dict):
     pets = {}
     for pet in dict['pets']:
-        pname=pet['name']
+        pname=pet['name'].lower()
         if len(pname.split()) > 1:
             list = pname.split()
             pname = list[0]
